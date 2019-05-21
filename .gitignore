@@ -1,0 +1,5 @@
+.idea
+logfile
+__pycache__/
+*.pyc
+venv/
