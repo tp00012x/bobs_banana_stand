@@ -15,9 +15,7 @@ class ProductStockManagement(object):
         return {key.decode('utf-8'): int(value.decode('utf-8')) for (key, value) in self.redis_stock.items()}
 
     def create_or_update_order_stock(self):
-        self.redis_instance.hset(
-            self.order.product.id, self.order.id, self.order.quantity
-        )
+        self.redis_instance.hset(self.order.product.id, self.order.id, self.order.quantity)
 
     def update_overall_stock(self):
         self.redis_instance.hmset(
@@ -26,6 +24,9 @@ class ProductStockManagement(object):
 
     def decrease_order_stock(self):
         self.redis_instance.hincrby(self.order.product.id, self.order.id, -self.order.quantity)
+
+    def deletes_order_stock(self):
+        self.redis_instance.hset(self.order.product.id, self.order.id, 0)
 
     def _calc_new_stock(self, d, c):
         [a, b], *_c = d
