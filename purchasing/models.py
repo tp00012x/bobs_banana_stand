@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 
-from bobs_banana_stand.models_signals import ModelsSignals
 from product.models.product import Product
 from purchasing.services.models_logic import PurchasedOrderLogic
+from purchasing.signals import PurchasedOrderSignals
 from sales.models import SalesOrder
 
 
@@ -38,5 +38,5 @@ class PurchasedOrder(models.Model):
         return "Product: {} ({}) - Quantity Purchased: {}".format(self.product.name, self.product.id, self.quantity)
 
 
-post_save.connect(ModelsSignals.create_or_update_order_stock, sender=PurchasedOrder)
-post_delete.connect(ModelsSignals.decrease_order_stock, sender=PurchasedOrder)
+post_save.connect(PurchasedOrderSignals.create_or_update_order_stock, sender=PurchasedOrder)
+post_delete.connect(PurchasedOrderSignals.decrease_order_stock, sender=PurchasedOrder)

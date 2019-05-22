@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models.signals import post_save
 
-from bobs_banana_stand.models_signals import ModelsSignals
 from product.models.product import Product
 from sales.services.models_logic import SalesOrderLogic
+from sales.signals import SalesOrdersSignals
 from sales.tasks import place_order
 
 
@@ -24,5 +24,5 @@ class SalesOrder(models.Model):
         return "Product: {} ({}) - Quantity Sold: {}".format(self.product.name, self.product.id, self.quantity)
 
 
-post_save.connect(ModelsSignals.update_redis_stock, sender=SalesOrder)
-post_save.connect(ModelsSignals.set_sold_out_purchased_orders, sender=SalesOrder)
+post_save.connect(SalesOrdersSignals.update_redis_stock, sender=SalesOrder)
+post_save.connect(SalesOrdersSignals.set_sold_out_purchased_orders, sender=SalesOrder)
