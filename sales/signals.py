@@ -6,7 +6,7 @@ class SalesOrdersSignals(object):
     @staticmethod
     def update_purchased_order_stock(instance, **kwargs):
         ProductStockManagement(instance).update_redis_stock()
-        SalesOrderLogic.update_purchased_order_stock(instance)
+        SalesOrderLogic(instance).update_purchased_order_stock()
 
     @staticmethod
     def set_sold_out_purchased_orders(instance, **kwargs):

@@ -15,7 +15,7 @@ class SalesOrder(models.Model):
 
     def save(self, *args, **kwargs):
         # verify that order can be completed by checking if there is enough in stock for this product
-        SalesOrderLogic.validate_if_in_stock(self)
+        SalesOrderLogic(self).validate_if_in_stock()
 
         # places order by adding it to the celery queue to support FIFO policy
         place_order.delay(super(SalesOrder, self).save(*args, **kwargs), self.id)
