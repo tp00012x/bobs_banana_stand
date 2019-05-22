@@ -22,23 +22,15 @@ class PurchasedOrder(models.Model):
         self.original_quantity = self.quantity
 
     def save(self, *args, **kwargs):
-        # We can't update a purchased order that has already been sold or is in the process of being sold or expired
+        # Only run when purchased order is being updated
         if self.pk:
-            print('run only on update')
-            PurchasedOrderLogic.check_if_expired(self)
-            PurchasedOrderLogic.check_if_sold_out(self)
-
-            PurchasedOrderLogic.validate_if_product_is_being_sold(self, self.original_quantity)
+            PurchasedOrderLogic.run_validations(self, self.original_quantity)
 
         super(PurchasedOrder, self).save(*args, **kwargs), self.id
         self.original_quantity = self.quantity
 
     def delete(self, *args, **kwargs):
-        # We can't delete a purchased order that has already been sold or is in the process of being sold or expired
-        PurchasedOrderLogic.check_if_expired(self)
-        PurchasedOrderLogic.check_if_sold_out(self)
-        # We can't delete a purchased order that has already been sold or is in the process of being sold
-        PurchasedOrderLogic.validate_if_product_is_being_sold(self, self.original_quantity)
+        PurchasedOrderLogic.run_validations(self, self.original_quantity)
 
         super(PurchasedOrder, self).delete(*args, **kwargs)
 
