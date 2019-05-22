@@ -27,16 +27,6 @@ class ProductStockManagement(object):
     def decrease_order_stock(self):
         self.redis_instance.hincrby(self.order.product.id, self.order.id, -self.order.quantity)
 
-    def validate_if_in_stock(self):
-        if self.order.quantity > sum(self.stock.values()):
-            raise Exception('There is no enough stock for product with id {}'.format(self.order.product.id))
-
-    def validate_if_product_has_been_sold(self):
-        if self.order.sold_out or self.order.quantity != self.stock.get(str(self.order.id)):
-            raise Exception(
-                "You can't return this purchase order with id {} because it has already been sold".format(self.order.id)
-            )
-
     def _calc_new_stock(self, d, c):
         [a, b], *_c = d
         return {a: 0 if c > b else b - c, **({} if not _c else self._calc_new_stock(_c, 0 if b > c else abs(b - c)))}

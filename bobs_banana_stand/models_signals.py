@@ -1,11 +1,12 @@
 from bobs_banana_stand.redis.product_stock_management import ProductStockManagement
 
 
-class Signals(object):
+class ModelsSignals(object):
     @staticmethod
     def create_or_update_order_stock(instance, **kwargs):
-        print('create or update order stock gets called')
-        ProductStockManagement(instance).create_or_update_order_stock()
+        # We only want to create or update the stock for this purchased order if the following conditions are met
+        if not instance.sold_out and not instance.expired:
+            ProductStockManagement(instance).create_or_update_order_stock()
 
     @staticmethod
     def update_redis_stock(instance, **kwargs):
@@ -16,7 +17,7 @@ class Signals(object):
         ProductStockManagement(instance).decrease_order_stock()
 
     @staticmethod
-    def verify_sold_out_purchased_orders(instance, **kwargs):
+    def set_sold_out_purchased_orders(instance, **kwargs):
         from purchasing.models import PurchasedOrder
 
         stock = ProductStockManagement(instance).stock
