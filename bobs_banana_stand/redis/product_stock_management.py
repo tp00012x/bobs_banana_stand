@@ -17,7 +17,7 @@ class ProductStockManagement(object):
     def create_or_update_order_stock(self):
         self.redis_instance.hset(self.order.product.id, self.order.id, self.order.quantity)
 
-    def update_overall_stock(self):
+    def update_redis_stock(self):
         self.redis_instance.hmset(
             self.order.product.id, self._calc_new_stock(list(self.stock.items()), self.order.quantity)
         )

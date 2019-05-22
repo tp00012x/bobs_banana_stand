@@ -1,10 +1,12 @@
 from bobs_banana_stand.redis.product_stock_management import ProductStockManagement
+from sales.services.models_logic import SalesOrderLogic
 
 
 class SalesOrdersSignals(object):
     @staticmethod
-    def update_redis_stock(instance, **kwargs):
-        ProductStockManagement(instance).update_overall_stock()
+    def update_purchased_order_stock(instance, **kwargs):
+        ProductStockManagement(instance).update_redis_stock()
+        SalesOrderLogic.update_purchased_order_stock(instance)
 
     @staticmethod
     def set_sold_out_purchased_orders(instance, **kwargs):
