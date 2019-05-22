@@ -4,6 +4,10 @@ from redis import Redis
 
 
 class ProductStockManagement(object):
+    """
+    A cool class that deals with handling the redis data.
+    """
+
     def __init__(self, order, db=0):
         self.order = order
         self.db = db
@@ -22,12 +26,14 @@ class ProductStockManagement(object):
             self.order.product.id, self._calc_new_stock(list(self.stock.items()), self.order.quantity)
         )
 
-    def decrease_order_stock(self):
-        self.redis_instance.hincrby(self.order.product.id, self.order.id, -self.order.quantity)
-
     def deletes_order_stock(self):
         self.redis_instance.hset(self.order.product.id, self.order.id, 0)
 
+    # TODO Need to work on renaming the variables use for readability
     def _calc_new_stock(self, d, c):
+        """
+        This recursive function iterates through my redis stock subtracting the sales order quantity from the purchased
+        order quantity. It ignores the values with a value of zero.
+        """
         [a, b], *_c = d
         return {a: 0 if c > b else b - c, **({} if not _c else self._calc_new_stock(_c, 0 if b > c else abs(b - c)))}

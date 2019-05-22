@@ -15,6 +15,7 @@ class SalesOrderLogic(object):
             if self._get_purchased_order(purchased_order_id):
                 PurchasedOrder.objects.filter(id=purchased_order_id).update(in_stock=stock)
 
+    # this methods check if we have enough products in stock before we make the final sale
     def validate_if_in_stock(self):
         if self.sales_order.quantity > sum(self.stock.values()):
             raise Exception('There is not enough in stock for product with id {}'.format(self.sales_order.product.id))

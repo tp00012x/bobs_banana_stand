@@ -8,6 +8,7 @@ from purchasing.models import PurchasedOrder
 from sales.models import SalesOrder
 
 
+# TODO Still in the process of figuring it out when to create new records that will contain metrics
 @app.task
 def generate_inventory_products():
     for product in Product.objects.all():

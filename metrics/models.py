@@ -4,6 +4,8 @@ from product.models.product import Product
 from sales.models import SalesOrder
 
 
+# TODO I might rename this table to make more sense as this will be the generated record when I choose a start and end
+#  date
 class InventoryProduct(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     total_qty_purchased = models.IntegerField(default=0)  # sum of all purchased orders' quantity for this product

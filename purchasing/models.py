@@ -41,4 +41,4 @@ class PurchasedOrder(models.Model):
 
 pre_save.connect(PurchasedOrderSignals.update_in_stock_value, sender=PurchasedOrder)
 post_save.connect(PurchasedOrderSignals.create_or_update_order_stock, sender=PurchasedOrder)
-post_delete.connect(PurchasedOrderSignals.decrease_order_stock, sender=PurchasedOrder)
+post_delete.connect(PurchasedOrderSignals.deletes_order_stock, sender=PurchasedOrder)
